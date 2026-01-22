@@ -4,7 +4,51 @@
 {% block content %}
 <div class="container-fluid">
   <h1 class="h4 mb-4">Fees</h1>
-  <p class="text-muted">Placeholder Fees page.</p>
+
+  <div class="row g-3 mb-3">
+    <div class="col-12 col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <div class="text-muted small">Today</div>
+          <div class="fs-4 fw-bold text-success">{{ totals.today }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <div class="text-muted small">This Month</div>
+          <div class="fs-4 fw-bold">{{ totals.month }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <div class="text-muted small">Pending</div>
+          <div class="fs-4 fw-bold text-danger">{{ totals.pending }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-responsive shadow-sm bg-white rounded">
+    <table class="table table-sm align-middle mb-0">
+      <thead class="table-light">
+        <tr><th>Receipt</th><th>Student</th><th>Amount</th><th>Mode</th><th>Date</th></tr>
+      </thead>
+      <tbody>
+        {% for p in payments %}
+        <tr>
+          <td>{{ p.receipt }}</td>
+          <td>{{ p.student }}</td>
+          <td>₹{{ "{:,.0f}".format(p.amount) }}</td>
+          <td>{{ p.mode }}</td>
+          <td>{{ p.date }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
 {% endblock %}
-``

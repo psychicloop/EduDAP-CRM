@@ -29,3 +29,43 @@ def api_search():
             or_(
                 ProductData.item_description.ilike(like),
                 ProductData.make.ilike(like),
+                ProductData.brand.ilike(like),
+                ProductData.cat_no.ilike(like),
+            )
+        ).limit(25).all()
+        for p in items:
+            results.append(
+                {
+                    "item_description": p.item_description,
+                    "make": p.make,
+                    "brand": p.brand,
+                    "cat_no": p.cat_no,
+                    "rate": p.rate,
+                }
+            )
+    return jsonify({"results": results})
+
+# -------- Upload (CSV / XLSX / PDF) --------
+@portal_bp.route('/upload', methods=['POST'])
+@login_required
+def upload_file():
+    f = request.files.get('file')
+    if not f or f.filename == '':
+        flash('Please choose a file.', 'danger')
+        return redirect(url_for('portal.dashboard'))
+
+    filename = f.filename
+    ext = filename.lower().rsplit('.', 1)[-1]
+    upload = Upload(user_id=current_user.id, filename=filename, filetype=ext)
+    db.session.add(upload)
+    db.session.flush()  # get upload.id before commit
+
+    try:
+        if ext in ('csv',):
+            df = pd.read_csv(f)
+            _ingest_dataframe(df, upload.id)
+
+        elif ext in ('xlsx', 'xls'):
+            df = pd.read_excel(f, engine='openpyxl')  # needs openpyxl (already in requirements)
+            _ingest_dataframe(df, upload.id)
+

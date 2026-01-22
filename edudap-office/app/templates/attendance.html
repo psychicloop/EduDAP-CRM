@@ -2,7 +2,6 @@
 <!-- edudap-office/app/templates/attendance.html -->
 {% extends "base.html" %}
 {% block title %}Attendance · EDUDAP CRM{% endblock %}
-
 {% block content %}
 <div class="container py-4">
   <h1 class="h4 mb-3">Attendance</h1>
@@ -18,9 +17,6 @@
   </div>
 
   <div id="result" class="alert d-none" role="alert"></div>
-
-  <hr>
-  <p class="text-muted small mb-0">This is a basic placeholder page. You can customize it later.</p>
 </div>
 
 <script>
@@ -32,9 +28,7 @@
 
       const r = await fetch('{{ url_for("portal.attendance_punch") }}', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: form.toString()
       });
 
@@ -62,4 +56,4 @@
 })();
 </script>
 {% endblock %}
-
+``

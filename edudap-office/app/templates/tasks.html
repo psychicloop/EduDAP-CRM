@@ -4,6 +4,29 @@
 {% block content %}
 <div class="container-fluid">
   <h1 class="h4 mb-4">Tasks</h1>
-  <p class="text-muted">Placeholder Tasks page.</p>
+  <div class="table-responsive shadow-sm bg-white rounded">
+    <table class="table table-sm align-middle mb-0">
+      <thead class="table-light">
+        <tr><th>ID</th><th>Title</th><th>Due</th><th>Priority</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        {% for t in tasks %}
+        <tr>
+          <td>{{ t.id }}</td>
+          <td>{{ t.title }}</td>
+          <td>{{ t.due }}</td>
+          <td>
+            {% set pb = {'High':'danger','Medium':'warning','Low':'secondary'}[t.priority] %}
+            <span class="badge text-bg-{{ pb }}">{{ t.priority }}</span>
+          </td>
+          <td>
+            {% set sb = {'Open':'primary','In Progress':'info','Done':'success'}[t.status] if t.status in ['Open','In Progress','Done'] else 'secondary' %}
+            <span class="badge text-bg-{{ sb }}">{{ t.status }}</span>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
 {% endblock %}

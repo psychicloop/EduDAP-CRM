@@ -1,0 +1,32 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<h2>Attendance</h2>
+<p class="text-muted">Punch in/out requires your location.</p>
+<div class="d-flex gap-2 mb-3">
+  <button class="btn btn-success" onclick="punch('in')">Punch In</button>
+  <button class="btn btn-danger" onclick="punch('out')">Punch Out</button>
+</div>
+<div class="card"><div class="card-body">
+  <h5 class="card-title">Today's Record</h5>
+  {% if record %}
+    <p class="mb-1">In: {{ record.in_time }} {% if record.in_lat %} ({{ record.in_lat }}, {{ record.in_lng }}) {% endif %}</p>
+    <p class="mb-0">Out: {{ record.out_time }} {% if record.out_lat %} ({{ record.out_lat }}, {{ record.out_lng }}) {% endif %}</p>
+  {% else %}
+    <p>No punches yet.</p>
+  {% endif %}
+</div></div>
+<script>
+function punch(action){
+  if(!navigator.geolocation){ alert('Geolocation not supported'); return; }
+  navigator.geolocation.getCurrentPosition(async pos => {
+    const form = new URLSearchParams();
+    form.append('action', action);
+    form.append('lat', pos.coords.latitude);
+    form.append('lng', pos.coords.longitude);
+    const r = await fetch('{{ url_for('portal.attendance_punch') }}', {method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body: form});
+    if(r.ok){ location.reload(); } else { const j = await r.json(); alert(j.error||'Failed'); }
+  }, err => alert('Location is required to punch in/out.'));
+}
+</script>
+{% endblock %}

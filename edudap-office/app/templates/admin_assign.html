@@ -1,0 +1,54 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<h2>Assign Tasks</h2>
+<form method="post" class="row g-3 mb-4">
+  <div class="col-md-4">
+    <label class="form-label">Title</label>
+    <input class="form-control" name="title" required />
+  </div>
+  <div class="col-md-3">
+    <label class="form-label">Assign To</label>
+    <select class="form-select" name="assigned_to" required>
+      {% for u in users %}
+      <option value="{{ u.id }}">{{ u.username }} ({{ u.role }})</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-md-3">
+    <label class="form-label">Priority</label>
+    <select class="form-select" name="priority">
+      <option>Low</option>
+      <option selected>Normal</option>
+      <option>High</option>
+      <option>Critical</option>
+    </select>
+  </div>
+  <div class="col-md-3">
+    <label class="form-label">Due</label>
+    <input type="datetime-local" class="form-control" name="due_at" />
+  </div>
+  <div class="col-12">
+    <label class="form-label">Details</label>
+    <textarea class="form-control" name="details"></textarea>
+  </div>
+  <div class="col-12">
+    <button class="btn btn-primary" type="submit">Assign</button>
+  </div>
+</form>
+<h4>Assigned Tasks</h4>
+<table class="table table-striped">
+  <thead><tr><th>Title</th><th>Assignee</th><th>Priority</th><th>Status</th><th>Created</th></tr></thead>
+  <tbody>
+  {% for t in tasks %}
+    <tr>
+      <td>{{ t.title }}</td>
+      <td>{{ t.assigned_to }}</td>
+      <td>{{ t.priority }}</td>
+      <td>{{ t.status }}</td>
+      <td>{{ t.created_at }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,23 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<h2>Manage Leaves</h2>
+<table class="table table-striped">
+  <thead><tr><th>User</th><th>Type</th><th>Dates</th><th>Reason</th><th>Status</th><th>Action</th></tr></thead>
+  <tbody>
+  {% for l in items %}
+    <tr>
+      <td>{{ l.user_id }}</td>
+      <td>{{ l.leave_type }}</td>
+      <td>{{ l.start_date }} → {{ l.end_date }}</td>
+      <td>{{ l.reason }}</td>
+      <td>{{ l.status }}</td>
+      <td>
+        <form class="d-inline" method="post" action="{{ url_for('admin.leaves_action', leave_id=l.id, action='approve') }}"><button class="btn btn-sm btn-success">Approve</button></form>
+        <form class="d-inline" method="post" action="{{ url_for('admin.leaves_action', leave_id=l.id, action='reject') }}"><button class="btn btn-sm btn-danger">Reject</button></form>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

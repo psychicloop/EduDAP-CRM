@@ -1,0 +1,27 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<h2>Live Attendance Map (Punched-In Today)</h2>
+<div id="map" style="height: 480px;" class="mb-3"></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<script>
+const map = L.map('map').setView([28.6139, 77.2090], 5); // India default view
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+let markers = [];
+async function loadLive(){
+  const r = await fetch('{{ url_for('admin.api_attendance_live') }}');
+  const data = await r.json();
+  markers.forEach(m => map.removeLayer(m));
+  markers = [];
+  data.results.forEach(x => {
+    if(x.lat && x.lng){
+      const m = L.marker([x.lat, x.lng]).addTo(map).bindPopup(`<b>${x.username}</b><br>In: ${x.in_time}`);
+      markers.push(m);
+    }
+  });
+}
+loadLive();
+setInterval(loadLive, 10000);
+</script>
+{% endblock %}

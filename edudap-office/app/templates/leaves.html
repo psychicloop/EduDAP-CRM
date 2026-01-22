@@ -1,0 +1,45 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<h2>Apply Leave</h2>
+<form method="post" class="row g-3 mb-4">
+  <div class="col-md-3">
+    <label class="form-label">Type</label>
+    <select class="form-select" name="leave_type" required>
+      <option value="Sick">Sick</option>
+      <option value="Casual">Casual</option>
+      <option value="Earned">Earned</option>
+      <option value="Other">Other</option>
+    </select>
+  </div>
+  <div class="col-md-3">
+    <label class="form-label">Start Date</label>
+    <input type="date" class="form-control" name="start_date" required />
+  </div>
+  <div class="col-md-3">
+    <label class="form-label">End Date</label>
+    <input type="date" class="form-control" name="end_date" required />
+  </div>
+  <div class="col-12">
+    <label class="form-label">Reason</label>
+    <input type="text" class="form-control" name="reason" placeholder="Reason" />
+  </div>
+  <div class="col-12">
+    <button class="btn btn-primary" type="submit">Apply</button>
+  </div>
+</form>
+<h4>Your Applications</h4>
+<table class="table table-striped">
+  <thead><tr><th>Type</th><th>Dates</th><th>Status</th><th>Applied</th></tr></thead>
+  <tbody>
+  {% for l in leaves %}
+    <tr>
+      <td>{{ l.leave_type }}</td>
+      <td>{{ l.start_date }} → {{ l.end_date }}</td>
+      <td>{{ l.status }}</td>
+      <td>{{ l.created_at }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

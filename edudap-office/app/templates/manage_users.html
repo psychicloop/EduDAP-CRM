@@ -1,0 +1,22 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<h2>Manage Users</h2>
+<table class="table table-striped">
+  <thead><tr><th>ID</th><th>Username</th><th>Email</th><th>Role</th><th>Actions</th></tr></thead>
+  <tbody>
+  {% for u in users %}
+    <tr>
+      <td>{{ u.id }}</td>
+      <td>{{ u.username }}</td>
+      <td>{{ u.email }}</td>
+      <td>{{ u.role }}</td>
+      <td>
+        <form class="d-inline" method="post" action="{{ url_for('admin.promote', user_id=u.id) }}"><button class="btn btn-sm btn-success" {% if u.role=='Admin' %}disabled{% endif %}>Promote</button></form>
+        <form class="d-inline" method="post" action="{{ url_for('admin.demote', user_id=u.id) }}"><button class="btn btn-sm btn-warning" {% if u.role!='Admin' %}disabled{% endif %}>Demote</button></form>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

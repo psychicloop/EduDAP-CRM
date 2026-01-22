@@ -1,0 +1,64 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<h2>To-Do / Assigned</h2>
+<form method="post" class="row g-3 mb-4">
+  <div class="col-md-4">
+    <label class="form-label">Title</label>
+    <input class="form-control" name="title" required />
+  </div>
+  <div class="col-md-3">
+    <label class="form-label">Priority</label>
+    <select class="form-select" name="priority">
+      <option>Low</option>
+      <option selected>Normal</option>
+      <option>High</option>
+      <option>Critical</option>
+    </select>
+  </div>
+  <div class="col-md-3">
+    <label class="form-label">Due</label>
+    <input type="datetime-local" class="form-control" name="due_at" />
+  </div>
+  <div class="col-md-3">
+    <label class="form-label">Reminder</label>
+    <input type="datetime-local" class="form-control" name="reminder_at" />
+  </div>
+  <div class="col-12">
+    <label class="form-label">Details</label>
+    <textarea class="form-control" name="details"></textarea>
+  </div>
+  <div class="col-12">
+    <button class="btn btn-primary" type="submit">Add To-Do</button>
+  </div>
+</form>
+
+<table class="table table-striped align-middle">
+  <thead><tr><th>Title</th><th>Priority</th><th>Status</th><th>Due</th><th></th></tr></thead>
+  <tbody>
+  {% for t in tasks %}
+    <tr>
+      <td>{{ t.title }}</td>
+      <td>{{ t.priority }}</td>
+      <td>
+        <select class="form-select form-select-sm" onchange="updateStatus({{ t.id }}, this.value)">
+          <option {% if t.status=='Todo' %}selected{% endif %}>Todo</option>
+          <option {% if t.status=='In Progress' %}selected{% endif %}>In Progress</option>
+          <option {% if t.status=='Done' %}selected{% endif %}>Done</option>
+        </select>
+      </td>
+      <td>{{ t.due_at }}</td>
+      <td></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+<script>
+async function updateStatus(id, status){
+  const form = new URLSearchParams();
+  form.append('status', status);
+  const r = await fetch(`{{ url_for('portal.task_status', task_id=0) }}`.replace('0',''+id), {method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body: form});
+  if(!r.ok){ alert('Failed to update'); }
+}
+</script>
+{% endblock %}

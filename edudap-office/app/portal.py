@@ -4,12 +4,10 @@ from flask import Blueprint, render_template, redirect, url_for, request, jsonif
 from flask_login import login_required, current_user
 from datetime import datetime, timezone
 
-# Blueprint for the main portal area
+# Portal blueprint
 portal_bp = Blueprint('portal', __name__, url_prefix='/app')
 
-# -------------------------
-# Core Pages
-# -------------------------
+# ---------- Core Navigation ----------
 
 @portal_bp.route('/', methods=['GET'])
 @login_required
@@ -69,31 +67,29 @@ def settings_page():
 @login_required
 def profile_page():
     """Endpoint: portal.profile_page"""
-    # If your current_user has fields, you can pass them into the template later
     return render_template('profile.html')
 
-# -------------------------
-# Attendance API (AJAX)
-# -------------------------
+# ---------- Attendance API (AJAX) ----------
 
 @portal_bp.route('/attendance/punch', methods=['POST'])
 @login_required
 def attendance_punch():
     """
     Endpoint: portal.attendance_punch
-    Accepts POST from the Attendance page and returns JSON.
+    Accepts POST { status: 'in' | 'out' } and returns JSON.
     """
     status = request.form.get('status') or (request.json.get('status') if request.is_json else None)
     if not status:
-        status = 'punch'  # default label if client didn’t send anything
+        status = 'punch'
 
     now = datetime.now(timezone.utc).isoformat()
     user_id = getattr(current_user, "id", None)
 
-    # TODO: Save to DB if needed
+    # TODO: Persist to DB if needed
     return jsonify({
         "ok": True,
         "status": status,
         "user_id": user_id,
         "timestamp": now
     }), 200
+``

@@ -1,11 +1,56 @@
 
-<!-- edudap-office/app/templates/dashboard.html -->
 {% extends "base.html" %}
 {% block title %}Dashboard · EDUDAP CRM{% endblock %}
 {% block content %}
 <div class="container-fluid">
-  <h1 class="h4 mb-4">Dashboard</h1>
-  <div class="alert alert-info">Welcome to the dashboard.</div>
-  <p class="text-muted">Use the sidebar to navigate.</p>
+  <div class="row g-3 mb-3">
+    <div class="col-6 col-lg-3">
+      <div class="card kpi-card shadow-sm">
+        <div class="card-body">
+          <div class="text-muted small">Leads</div>
+          <div class="fs-3 fw-bold">{{ stats.leads }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="card kpi-card shadow-sm">
+        <div class="card-body">
+          <div class="text-muted small">Students</div>
+          <div class="fs-3 fw-bold">{{ stats.students }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="card kpi-card shadow-sm">
+        <div class="card-body">
+          <div class="text-muted small">Fees Today</div>
+          <div class="fs-5 fw-bold">{{ stats.fees_today }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="card kpi-card shadow-sm">
+        <div class="card-body">
+          <div class="text-muted small">Pending Tasks</div>
+          <div class="fs-3 fw-bold">{{ stats.pending_tasks }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-header bg-white fw-semibold">Notices</div>
+    <div class="list-group list-group-flush">
+      {% for n in notices %}
+      <div class="list-group-item d-flex justify-content-between align-items-center">
+        <div>
+          <div class="fw-semibold">{{ n.title }}</div>
+          <div class="text-muted small">{{ n.desc }}</div>
+        </div>
+        <span class="badge text-bg-{{ n.badge }}">{{ n.badge|capitalize }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
 </div>
 {% endblock %}

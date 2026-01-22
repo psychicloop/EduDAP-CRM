@@ -4,15 +4,24 @@
 {% block content %}
 <div class="container-fluid">
   <h1 class="h4 mb-4">Leads</h1>
-  <p class="text-muted">Placeholder Leads page.</p>
-  <div class="table-responsive">
-    <table class="table table-sm align-middle">
+  <div class="table-responsive shadow-sm bg-white rounded">
+    <table class="table table-sm align-middle mb-0">
       <thead class="table-light">
         <tr><th>#</th><th>Name</th><th>Source</th><th>Status</th><th>Updated</th></tr>
       </thead>
       <tbody>
-        <tr><td>1</td><td>Alice Singh</td><td>Website</td><td><span class="badge bg-warning text-dark">New</span></td><td>—</td></tr>
-        <tr><td>2</td><td>Rohit Kumar</td><td>Referral</td><td><span class="badge bg-info text-dark">Contacted</span></td><td>—</td></tr>
+        {% for l in leads %}
+        <tr>
+          <td>{{ l.id }}</td>
+          <td>{{ l.name }}</td>
+          <td>{{ l.source }}</td>
+          <td>
+            {% set b = {'New':'warning','Contacted':'info','Qualified':'success'}[l.status] if l.status in ['New','Contacted','Qualified'] else 'secondary' %}
+            <span class="badge text-bg-{{ b }}">{{ l.status }}</span>
+          </td>
+          <td>{{ l.updated }}</td>
+        </tr>
+        {% endfor %}
       </tbody>
     </table>
   </div>

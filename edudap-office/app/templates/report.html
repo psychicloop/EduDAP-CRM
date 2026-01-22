@@ -4,6 +4,54 @@
 {% block content %}
 <div class="container-fluid">
   <h1 class="h4 mb-4">Reports</h1>
-  <p class="text-muted">Placeholder Reports page.</p>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <canvas id="chartAdmissionsRevenue" height="110"></canvas>
+    </div>
+  </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+(function(){
+  const ctx = document.getElementById('chartAdmissionsRevenue');
+  const labels = {{ chart.labels | tojson }};
+  const admissions = {{ chart.admissions | tojson }};
+  const revenue = {{ chart.revenue | tojson }};
+
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Admissions',
+          data: admissions,
+          borderColor: getComputedStyle(document.documentElement).getPropertyValue('--edudap-accent').trim(),
+          backgroundColor: 'transparent',
+          tension: 0.3,
+          yAxisID: 'y1'
+        },
+        {
+          label: 'Revenue (₹)',
+          data: revenue,
+          borderColor: getComputedStyle(document.documentElement).getPropertyValue('--edudap-primary').trim(),
+          backgroundColor: 'transparent',
+          borderWidth: 3,
+          tension: 0.3,
+          yAxisID: 'y2'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y1: { type: 'linear', position: 'left', grid: { drawOnChartArea: false } },
+        y2: { type: 'linear', position: 'right' }
+      }
+    }
+  });
+})();
+</script>
 {% endblock %}

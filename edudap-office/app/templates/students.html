@@ -4,6 +4,26 @@
 {% block content %}
 <div class="container-fluid">
   <h1 class="h4 mb-4">Students</h1>
-  <p class="text-muted">Placeholder Students page.</p>
+  <div class="table-responsive shadow-sm bg-white rounded">
+    <table class="table table-sm align-middle mb-0">
+      <thead class="table-light">
+        <tr><th>ID</th><th>Name</th><th>Course</th><th>Batch</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        {% for s in students %}
+        <tr>
+          <td>{{ s.id }}</td>
+          <td>{{ s.name }}</td>
+          <td>{{ s.course }}</td>
+          <td>{{ s.batch }}</td>
+          <td>
+            {% set b = {'Active':'success','On Hold':'secondary','Alumni':'info'}[s.status] if s.status in ['Active','On Hold','Alumni'] else 'light' %}
+            <span class="badge text-bg-{{ b }}">{{ s.status }}</span>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
 {% endblock %}
